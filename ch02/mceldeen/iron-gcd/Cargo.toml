@@ -1,0 +1,10 @@
+[package]
+name = "iron-gcd"
+version = "0.1.0"
+authors = ["Matthew Conger-Eldeen <mceldeen@gmail.com>"]
+
+[dependencies]
+iron = "0.5.*"
+mime = "0.2.*"
+router = "*"
+urlencoded = "*"
