@@ -1,7 +1,8 @@
 #![feature(advanced_slice_patterns, slice_patterns)]
 
 extern crate iron;
-#[macro_use] extern crate mime;
+#[macro_use]
+extern crate mime;
 extern crate router;
 extern crate urlencoded;
 
@@ -52,7 +53,11 @@ fn post_gcd(request: &mut Request) -> IronResult<Response> {
             .and_then(|mut hashmap| {
                 hashmap.remove("n")
                     .ok_or(format!("form data has no 'n' parameter\n"))
-                    .map(|num_strs| num_strs.into_iter())
+                    .map(|num_strs| {
+                        num_strs
+                            .into_iter()
+                            .filter(|num_str| num_str.len() > 0)
+                    })
             })
             .and_then(parse_numbers)
             .and_then(|nums| {
@@ -62,7 +67,8 @@ fn post_gcd(request: &mut Request) -> IronResult<Response> {
                         Response::new()
                             .set(status::Ok)
                             .set(mime!(Text/Plain; Charset=Utf8))
-                            .set(format!("The greatest common divisor of the numbers {:?} is {}\n", nums, gcd))
+                            .set(format!("The greatest common divisor of the numbers {:?} is {}\n"
+                                         , nums, gcd))
                     })
             })
             .unwrap_or_else(|e| {
@@ -73,7 +79,6 @@ fn post_gcd(request: &mut Request) -> IronResult<Response> {
             })
     )
 }
-
 
 fn parse_numbers<I>(num_strs: I) -> Result<Vec<u64>, String>
     where I: Iterator<Item=String> + std::marker::Sized {
