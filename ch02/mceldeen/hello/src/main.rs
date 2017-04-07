@@ -18,7 +18,7 @@ fn main() {
             println!("{}", answer)
         },
         Err(err) => {
-            let _ = writeln!(std::io::stderr(), "{}", err);
+            writeln!(std::io::stderr(), "{}", err).unwrap();
             std::process::exit(1)
         },
     };
